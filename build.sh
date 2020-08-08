@@ -91,6 +91,13 @@ unzip "$PROJECT_ROOT"/work/server/paperbin_patched.jar -d "$PROJECT_ROOT"/work/c
 
 java -jar fernflower.jar -hes=0 -hdc=0 "$PAPERBIN_COMPILED"/net/minecraft/server/v1_12_R1/ "$PAPERBIN_DECOMPILED"
 
+echo "change namespace"
+
+for f in "$PAPERBIN_DECOMPILED"/*
+do
+  sed -i -e 's/.v1_12_R1//g' $f
+done
+
 ###
 
 echo "generate preparing paper source"
@@ -101,7 +108,9 @@ git checkout "$GIT_PAPER_BRANCH"
 
 cp "$PROJECT_ROOT"/importmcdev.sh "$PROJECT_ROOT"/work/src/scripts/
 
-./paper patch
+git add .
+git commit -m "class import"
+./paper jar
 
 cp "$PAPERBIN_DECOMPILED"/* "$PROJECT_ROOT"/work/src/Paper-Server/src/main/java/net/minecraft/server/
 cd "$PROJECT_ROOT"/work/src/Paper-Server/
@@ -109,5 +118,6 @@ git add .
 git commit -m "paperbin"
 cd ..
 ./paper rebuild
+./paper jar
 
 cd "$PROJECT_ROOT"
