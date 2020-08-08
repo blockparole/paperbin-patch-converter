@@ -91,12 +91,18 @@ unzip "$PROJECT_ROOT"/work/server/paperbin_patched.jar -d "$PROJECT_ROOT"/work/c
 
 java -jar fernflower.jar -hes=0 -hdc=0 "$PAPERBIN_COMPILED"/net/minecraft/server/v1_12_R1/ "$PAPERBIN_DECOMPILED"
 
+# TODO: MinecraftServer.class decompilation fails here
+
 echo "change namespace"
 
 for f in "$PAPERBIN_DECOMPILED"/*
 do
   sed -i -e 's/.v1_12_R1//g' $f
 done
+
+###
+
+exit 0
 
 ###
 
@@ -117,6 +123,7 @@ cd "$PROJECT_ROOT"/work/src/Paper-Server/
 git add .
 git commit -m "paperbin"
 cd ..
+
 ./paper rebuild
 ./paper jar
 
